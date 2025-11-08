@@ -4,13 +4,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.br.CPF;
 
-@Data
+@Getter
+@Setter
 @MappedSuperclass
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,6 +25,5 @@ public abstract class Pessoa {
     @NotBlank
     @Size(min = 5, max = 60)
     protected String nomeCompleto;
-
 
 }

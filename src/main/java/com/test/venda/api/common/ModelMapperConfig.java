@@ -1,4 +1,4 @@
-package com.test.venda.api.mapper;
+package com.test.venda.api.common;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
