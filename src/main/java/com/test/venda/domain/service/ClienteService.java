@@ -46,7 +46,11 @@ public class ClienteService {
     }
 
     public List<Cliente> listarTodos() {
-        return repository.findAll();
+        List<Cliente> clientes = repository.findAll();
+        if (clientes.isEmpty()) {
+            throw new NegocioException("Nenhum cliente cadastrado no sistema!");
+        }
+        return clientes;
     }
 
     public Optional<Cliente> buscarPorId(Long id) {
@@ -59,9 +63,13 @@ public class ClienteService {
         return cliente;
     }
 
-    public void deletar(Long id){
+    public void deletar(Long id) {
+        if (!repository.existsById(id)) {
+            throw new NegocioException("Cliente não encontrado!");
+        }
         repository.deleteById(id);
     }
+
 
 
 
