@@ -48,11 +48,12 @@ public class VendedorController {
 
     @PutMapping("/{id}")
     public ResponseEntity<VendedorResponse> alterar(@PathVariable Long id, @RequestBody VendedorRequest request) {
-        Vendedor paciente = mapper.toVendedor(request);
-        Vendedor pacienteSalvo = service.alterar(id, paciente);
-        VendedorResponse pacienteResponse = mapper.toVendedorResponse(pacienteSalvo);
-        return ResponseEntity.status(HttpStatus.OK).body(pacienteResponse);
+        Vendedor vendedor = mapper.toVendedor(request);
+        Vendedor vendedorSalvo = service.alterar(id, vendedor);
+        VendedorResponse vendedorResponse = mapper.toVendedorResponse(vendedorSalvo);
+        return ResponseEntity.status(HttpStatus.OK).body(vendedorResponse);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {

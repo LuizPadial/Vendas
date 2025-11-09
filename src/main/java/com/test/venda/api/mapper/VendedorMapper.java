@@ -23,8 +23,8 @@ public class VendedorMapper {
         return mapper.map(vendedor, VendedorResponse.class);
     }
 
-    public List<VendedorResponse> toPacienteResponseList(List<Vendedor> pacientes) {
-        return pacientes.stream()
+    public List<VendedorResponse> toVendedorResponseList(List<Vendedor> vendedores) {
+        return vendedores.stream()
                 .map(this::toVendedorResponse)
                 .collect(Collectors.toList());
     }

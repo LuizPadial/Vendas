@@ -49,10 +49,10 @@ public class ClienteController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ClienteResponse> alterar(@PathVariable Long id, @RequestBody ClienteRequest request) {
-        Cliente paciente = mapper.toCliente(request);
-        Cliente pacienteSalvo = service.alterar(id, paciente);
-        ClienteResponse pacienteResponse = mapper.toClienteResponse(pacienteSalvo);
-        return ResponseEntity.status(HttpStatus.OK).body(pacienteResponse);
+        Cliente cliente = mapper.toCliente(request);
+        Cliente clienteSalvo = service.alterar(id, cliente);
+        ClienteResponse clienteResponse = mapper.toClienteResponse(clienteSalvo);
+        return ResponseEntity.status(HttpStatus.OK).body(clienteResponse);
     }
 
     @DeleteMapping("/{id}")

@@ -1,6 +1,5 @@
 package com.test.venda.domain.service;
 
-import com.test.venda.domain.entity.Cliente;
 import com.test.venda.domain.entity.Produto;
 import com.test.venda.domain.exceptions.NegocioException;
 import com.test.venda.domain.repository.ProdutoRepository;
@@ -21,7 +20,7 @@ public class ProdutoService {
 
     public Produto salvar(@NotNull Produto produto){
 
-        Optional<Produto> optProduto = repository.findByNome(produto.getNomeProduto());
+        Optional<Produto> optProduto = repository.findByNomeProduto(produto.getNomeProduto());
         if (optProduto.isPresent() && !optProduto.get().getId().equals(produto.getId())) {
             throw new NegocioException("Produto já cadastrado!");
         }
@@ -57,7 +56,7 @@ public class ProdutoService {
     }
     public void deletar(Long id){
         if(!repository.existsById(id)){
-            throw new NegocioException("Cliente não encontrado");
+            throw new NegocioException("Produto não encontrado");
         }
         repository.deleteById(id);
     }

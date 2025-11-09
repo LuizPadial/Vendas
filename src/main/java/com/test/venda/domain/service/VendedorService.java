@@ -3,7 +3,6 @@ package com.test.venda.domain.service;
 import com.test.venda.domain.entity.Vendedor;
 import com.test.venda.domain.exceptions.NegocioException;
 import com.test.venda.domain.repository.VendedorRepository;
-import com.test.venda.domain.repository.VendedorRepository;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;

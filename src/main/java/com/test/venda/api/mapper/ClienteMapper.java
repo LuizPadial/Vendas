@@ -25,8 +25,8 @@ public class ClienteMapper {
         return mapper.map(cliente, ClienteResponse.class);
     }
 
-    public List<ClienteResponse> toPacienteResponseList(List<Cliente> pacientes) {
-        return pacientes.stream()
+    public List<ClienteResponse> toClienteResponseList(List<Cliente> clientes) {
+        return clientes.stream()
                 .map(this::toClienteResponse)
                 .collect(Collectors.toList());
     }
