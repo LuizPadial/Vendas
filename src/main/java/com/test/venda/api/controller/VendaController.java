@@ -2,7 +2,7 @@ package com.test.venda.api.controller;
 
 import com.test.venda.api.dto.request.VendaRequest;
 import com.test.venda.api.dto.response.VendaResponse;
-import com.test.venda.api.mapper.VendaMapper;
+import com.test.venda.api.mappers.VendaMapper;
 import com.test.venda.domain.entity.Venda;
 import com.test.venda.domain.service.VendaService;
 import jakarta.validation.Valid;

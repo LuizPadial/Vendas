@@ -1,10 +1,16 @@
 package com.test.venda.domain.service;
 
+import com.test.venda.api.dto.request.ProdutoRequest;
+import com.test.venda.api.dto.response.ProdutoResponse;
+import com.test.venda.api.mappers.ProdutoMapper;
+import com.test.venda.domain.entity.Produto;
 import com.test.venda.domain.entity.Produto;
 import com.test.venda.domain.exceptions.NegocioException;
 import com.test.venda.domain.repository.ProdutoRepository;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,46 +23,35 @@ import java.util.Optional;
 public class ProdutoService {
 
     private final ProdutoRepository repository;
+    private final ProdutoMapper mapper;
 
-    public Produto salvar(@NotNull Produto produto){
+    public ProdutoResponse salvar(ProdutoRequest request) {
+        Produto produto = mapper.toEntity(request);
 
-        Optional<Produto> optProduto = repository.findByNomeProduto(produto.getNomeProduto());
-        if (optProduto.isPresent() && !optProduto.get().getId().equals(produto.getId())) {
-            throw new NegocioException("Produto já cadastrado!");
-        }
-        return repository.save(produto);
+        return mapper.toModel(repository.save(produto));
     }
 
-    public Produto alterar(Long id, Produto produto) {
-        Optional<Produto> optProduto = repository.findById(id);
+    public List<ProdutoResponse> listarProdutos() {
 
-        if(optProduto.isEmpty()){
-            throw new NegocioException("Produto não cadastrado");
-        }
-        produto.setId(id);
-
-        return salvar(produto);
+        return mapper.toColletionModel(repository.findAll());
     }
 
-    public List<Produto> listarTodos(){
-        List<Produto> produtos = repository.findAll();
-        if(produtos.isEmpty()) {
-            throw new NegocioException("Nenhum produto cadastrado no sistema!");
-        }
-        return produtos;
+    public ProdutoResponse buscarPorId(Long id) {
+        return repository.findById(id)
+                .map(mapper::toModel)
+                .orElseThrow(() -> new NegocioException("Produto não encontrado"));
+
     }
 
-    public Optional<Produto> buscarPorId(Long id) {
-        Optional<Produto> produto = repository.findById(id);
+    public ResponseEntity<Produto> alterarProduto(Long id, ProdutoRequest request) {
+        return repository.findById(id).isPresent()
+                ? ResponseEntity.ok(repository.save(ProdutoResponse.of(request, id)))
+                : ResponseEntity.notFound().build();
+    }
 
-        if(produto.isEmpty()){
+    public void deletar(Long id) {
+        if (!repository.existsById(id)) {
             throw new NegocioException("Produto não encontrado!");
-        }
-        return produto;
-    }
-    public void deletar(Long id){
-        if(!repository.existsById(id)){
-            throw new NegocioException("Produto não encontrado");
         }
         repository.deleteById(id);
     }

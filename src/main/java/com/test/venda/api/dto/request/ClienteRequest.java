@@ -12,7 +12,6 @@ public class ClienteRequest {
 
     @NotNull
     private String nomeCompleto;
-
     @NotNull
     private String cpf;
 

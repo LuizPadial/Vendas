@@ -2,7 +2,6 @@ package com.test.venda.api.controller;
 
 import com.test.venda.api.dto.request.VendedorRequest;
 import com.test.venda.api.dto.response.VendedorResponse;
-import com.test.venda.api.mapper.VendedorMapper;
 import com.test.venda.domain.entity.Vendedor;
 import com.test.venda.domain.service.VendedorService;
 import jakarta.validation.Valid;
@@ -12,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -20,45 +19,32 @@ import java.util.stream.Collectors;
 public class VendedorController {
 
     private final VendedorService service;
-    private final VendedorMapper mapper;
-
     @PostMapping
-    public ResponseEntity<VendedorResponse> salvar(@Valid @RequestBody VendedorRequest request) {
-        Vendedor vendedor = mapper.toVendedor(request);
-        Vendedor vendedorSalvo = service.salvar(vendedor);
-        VendedorResponse vendedorResponse = mapper.toVendedorResponse(vendedorSalvo);
-        return ResponseEntity.status(HttpStatus.CREATED).body(vendedorResponse);
+    @ResponseStatus(HttpStatus.CREATED)
+    public VendedorResponse setVendedor(@Valid @RequestBody VendedorRequest request) {
+        return service.salvar(request);
     }
 
     @GetMapping
-    public ResponseEntity<List<VendedorResponse>> listarTodos(){
-        List<VendedorResponse> vendedorResponse = service.listarTodos()
-                .stream()
-                .map(mapper::toVendedorResponse)
-                .collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(vendedorResponse);
+    public List<VendedorResponse> listarTodos(){
+        return service.listarVendedores();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VendedorResponse> buscarPorId(@PathVariable Long id){
-        return service.buscarPorId(id)
-                .map(mapper::toVendedorResponse)
-                .map(vendedorResponse -> ResponseEntity.status(HttpStatus.OK).body(vendedorResponse))
-                .orElse(ResponseEntity.notFound().build());
+    public VendedorResponse buscarPorId(@PathVariable Long id){
+        return service.buscarPorId(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VendedorResponse> alterar(@PathVariable Long id, @RequestBody VendedorRequest request) {
-        Vendedor vendedor = mapper.toVendedor(request);
-        Vendedor vendedorSalvo = service.alterar(id, vendedor);
-        VendedorResponse vendedorResponse = mapper.toVendedorResponse(vendedorSalvo);
-        return ResponseEntity.status(HttpStatus.OK).body(vendedorResponse);
+    public ResponseEntity<Vendedor> alterar(@PathVariable Long id,
+                                           @Valid @RequestBody VendedorRequest request) {
+        return service.alterarVendedor(id, request);
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         service.deletar(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
 }

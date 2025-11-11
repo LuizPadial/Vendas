@@ -2,14 +2,18 @@ package com.test.venda.domain.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import jdk.jshell.Snippet;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 
 @Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "PRODUTO")

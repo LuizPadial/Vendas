@@ -2,7 +2,7 @@ package com.test.venda.api.controller;
 
 import com.test.venda.api.dto.request.ClienteRequest;
 import com.test.venda.api.dto.response.ClienteResponse;
-import com.test.venda.api.mapper.ClienteMapper;
+import com.test.venda.api.mappers.ClienteMapper;
 import com.test.venda.domain.entity.Cliente;
 import com.test.venda.domain.service.ClienteService;
 import jakarta.validation.Valid;
@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -20,39 +19,26 @@ import java.util.stream.Collectors;
 public class ClienteController {
 
     private final ClienteService service;
-    private final ClienteMapper mapper;
-
     @PostMapping
-    public ResponseEntity<ClienteResponse> salvar(@Valid @RequestBody ClienteRequest request) {
-        Cliente cliente = mapper.toCliente(request);
-        Cliente clienteSalvo = service.salvar(cliente);
-        ClienteResponse clienteResponse = mapper.toClienteResponse(clienteSalvo);
-        return ResponseEntity.status(HttpStatus.CREATED).body(clienteResponse);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ClienteResponse setCliente(@Valid @RequestBody ClienteRequest request) {
+        return service.salvar(request);
     }
 
     @GetMapping
-    public ResponseEntity<List<ClienteResponse>> listarTodos(){
-        List<ClienteResponse> clienteResponse = service.listarTodos()
-                .stream()
-                .map(mapper::toClienteResponse)
-                .collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(clienteResponse);
+    public List<ClienteResponse> listarTodos(){
+        return service.listarClientes();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClienteResponse> buscarPorId(@PathVariable Long id){
-        return service.buscarPorId(id)
-                .map(mapper::toClienteResponse)
-                .map(clienteResponse -> ResponseEntity.status(HttpStatus.OK).body(clienteResponse))
-                .orElse(ResponseEntity.notFound().build());
+    public ClienteResponse buscarPorId(@PathVariable Long id){
+        return service.buscarPorId(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteResponse> alterar(@PathVariable Long id, @RequestBody ClienteRequest request) {
-        Cliente cliente = mapper.toCliente(request);
-        Cliente clienteSalvo = service.alterar(id, cliente);
-        ClienteResponse clienteResponse = mapper.toClienteResponse(clienteSalvo);
-        return ResponseEntity.status(HttpStatus.OK).body(clienteResponse);
+    public ResponseEntity<Cliente> alterar(@PathVariable Long id,
+            @Valid @RequestBody ClienteRequest request) {
+        return service.alterarCliente(id, request);
     }
 
     @DeleteMapping("/{id}")

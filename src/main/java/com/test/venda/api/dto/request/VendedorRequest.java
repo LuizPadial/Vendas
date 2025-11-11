@@ -12,7 +12,6 @@ public class VendedorRequest {
 
     @NotNull
     private String nomeCompleto;
-
     @NotNull
     private String cpf;
 }

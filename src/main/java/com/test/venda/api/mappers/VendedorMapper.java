@@ -1,4 +1,4 @@
-package com.test.venda.api.mapper;
+package com.test.venda.api.mappers;
 
 import com.test.venda.api.dto.request.VendedorRequest;
 import com.test.venda.api.dto.response.VendedorResponse;
@@ -15,17 +15,17 @@ public class VendedorMapper {
 
     private final ModelMapper mapper;
 
-    public Vendedor toVendedor(VendedorRequest request){
+    public Vendedor toEntity(VendedorRequest request){
         return mapper.map(request, Vendedor.class);
     }
 
-    public VendedorResponse toVendedorResponse(Vendedor vendedor) {
+    public VendedorResponse toModel(Vendedor vendedor) {
         return mapper.map(vendedor, VendedorResponse.class);
     }
 
-    public List<VendedorResponse> toVendedorResponseList(List<Vendedor> vendedores) {
+    public List<VendedorResponse> toColletionModel(List<Vendedor> vendedores) {
         return vendedores.stream()
-                .map(this::toVendedorResponse)
+                .map(this::toModel)
                 .collect(Collectors.toList());
     }
 }

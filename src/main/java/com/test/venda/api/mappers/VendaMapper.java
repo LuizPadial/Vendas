@@ -1,9 +1,7 @@
-package com.test.venda.api.mapper;
+package com.test.venda.api.mappers;
 
 import com.test.venda.api.dto.request.VendaRequest;
-import com.test.venda.api.dto.response.ProdutoResponse;
 import com.test.venda.api.dto.response.VendaResponse;
-import com.test.venda.domain.entity.Produto;
 import com.test.venda.domain.entity.Venda;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

@@ -3,6 +3,8 @@ package com.test.venda.api.dto.request;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Builder
@@ -13,5 +15,5 @@ public class ProdutoRequest {
     @NotNull
     private String nomeProduto;
     @NotNull
-    private String preco;
+    private BigDecimal preco;
 }
