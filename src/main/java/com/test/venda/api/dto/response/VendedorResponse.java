@@ -1,7 +1,5 @@
 package com.test.venda.api.dto.response;
 
-import com.test.venda.api.dto.request.VendedorRequest;
-import com.test.venda.domain.entity.Vendedor;
 import lombok.*;
 
 @Getter

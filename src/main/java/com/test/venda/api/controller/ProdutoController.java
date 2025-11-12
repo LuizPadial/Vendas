@@ -2,7 +2,6 @@ package com.test.venda.api.controller;
 
 import com.test.venda.api.dto.request.ProdutoRequest;
 import com.test.venda.api.dto.response.ProdutoResponse;
-import com.test.venda.domain.entity.Produto;
 import com.test.venda.domain.service.ProdutoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
