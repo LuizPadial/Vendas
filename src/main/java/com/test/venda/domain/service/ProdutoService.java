@@ -1,8 +1,11 @@
 package com.test.venda.domain.service;
 
+import com.test.venda.api.dto.request.ClienteRequest;
 import com.test.venda.api.dto.request.ProdutoRequest;
+import com.test.venda.api.dto.response.ClienteResponse;
 import com.test.venda.api.dto.response.ProdutoResponse;
 import com.test.venda.api.mappers.ProdutoMapper;
+import com.test.venda.domain.entity.Cliente;
 import com.test.venda.domain.entity.Produto;
 import com.test.venda.domain.entity.Produto;
 import com.test.venda.domain.exceptions.NegocioException;
@@ -26,13 +29,14 @@ public class ProdutoService {
     private final ProdutoMapper mapper;
 
     public ProdutoResponse salvar(ProdutoRequest request) {
+        if(repository.findByNomeProduto(request.getNomeProduto()).isPresent()){
+            throw new NegocioException("Produto já Cadastrado");
+        }
         Produto produto = mapper.toEntity(request);
-
         return mapper.toModel(repository.save(produto));
     }
 
     public List<ProdutoResponse> listarProdutos() {
-
         return mapper.toColletionModel(repository.findAll());
     }
 
@@ -40,13 +44,16 @@ public class ProdutoService {
         return repository.findById(id)
                 .map(mapper::toModel)
                 .orElseThrow(() -> new NegocioException("Produto não encontrado"));
-
     }
 
-    public ResponseEntity<Produto> alterarProduto(Long id, ProdutoRequest request) {
-        return repository.findById(id).isPresent()
-                ? ResponseEntity.ok(repository.save(ProdutoResponse.of(request, id)))
-                : ResponseEntity.notFound().build();
+    public ProdutoResponse alterarProduto(Long id, ProdutoRequest request) {
+        Produto produto = mapper.toEntity(request);
+        produto.setId(id);
+
+        if (produto.getId() != null && !repository.existsById(produto.getId())) {
+            throw new NegocioException("Produto não encontrado para atualização");
+        }
+        return mapper.toModel(repository.save(produto));
     }
 
     public void deletar(Long id) {

@@ -8,4 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface VendedorRepository extends JpaRepository<Vendedor, Long> {
+    Optional<Vendedor> findByCpf(String cpf);
+
 }

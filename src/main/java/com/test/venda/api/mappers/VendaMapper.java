@@ -16,17 +16,11 @@ public class VendaMapper {
 
     private final ModelMapper mapper;
 
-    public Venda toVenda(VendaRequest request){
+    public Venda toEntity(VendaRequest request){
         return mapper.map(request, Venda.class);
     }
-    public VendaResponse toVendaResponse(Venda venda) {
+    public VendaResponse toModel(Venda venda) {
         return mapper.map(venda, VendaResponse.class);
-    }
-
-    public List<VendaResponse> toVendaResponseList(List<Venda> vendas) {
-        return vendas.stream()
-                .map(this::toVendaResponse)
-                .collect(Collectors.toList());
     }
 
 

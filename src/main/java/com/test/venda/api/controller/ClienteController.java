@@ -36,7 +36,7 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> alterar(@PathVariable Long id,
+    public ClienteResponse alterar(@PathVariable Long id,
             @Valid @RequestBody ClienteRequest request) {
         return service.alterarCliente(id, request);
     }

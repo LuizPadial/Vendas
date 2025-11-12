@@ -37,7 +37,7 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Produto> alterar(@PathVariable Long id,
+    public ProdutoResponse alterar(@PathVariable Long id,
                                            @Valid @RequestBody ProdutoRequest request) {
         return service.alterarProduto(id, request);
     }

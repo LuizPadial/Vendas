@@ -17,19 +17,4 @@ public class ProdutoResponse {
     private String nomeProduto;
     private BigDecimal preco;
 
-    public static Produto of(ProdutoRequest produtoRequest, Long id){
-        return Produto.builder()
-                .id(id)
-                .nomeProduto(produtoRequest.getNomeProduto())
-                .preco(produtoRequest.getPreco()).build();
-    }
-
-    public static ProdutoResponse of(Produto produto) {
-        return ProdutoResponse.builder()
-                .id(produto.getId())
-                .nomeProduto(produto.getNomeProduto())
-                .preco(produto.getPreco()).build();
-    }
-
-
 }

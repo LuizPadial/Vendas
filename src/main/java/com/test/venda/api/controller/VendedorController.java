@@ -2,7 +2,6 @@ package com.test.venda.api.controller;
 
 import com.test.venda.api.dto.request.VendedorRequest;
 import com.test.venda.api.dto.response.VendedorResponse;
-import com.test.venda.domain.entity.Vendedor;
 import com.test.venda.domain.service.VendedorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +35,9 @@ public class VendedorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Vendedor> alterar(@PathVariable Long id,
-                                           @Valid @RequestBody VendedorRequest request) {
-        return service.alterarVendedor(id, request);
+    public VendedorResponse alterar(@PathVariable Long id,
+                                    @Valid @RequestBody VendedorRequest request) {
+        return service.alterarVendedor(id,request);
     }
 
     @DeleteMapping("/{id}")

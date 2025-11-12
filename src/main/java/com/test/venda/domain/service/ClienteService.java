@@ -1,8 +1,11 @@
 package com.test.venda.domain.service;
 
 import com.test.venda.api.dto.request.ClienteRequest;
+import com.test.venda.api.dto.request.ClienteRequest;
+import com.test.venda.api.dto.response.ClienteResponse;
 import com.test.venda.api.dto.response.ClienteResponse;
 import com.test.venda.api.mappers.ClienteMapper;
+import com.test.venda.domain.entity.Cliente;
 import com.test.venda.domain.entity.Cliente;
 import com.test.venda.domain.exceptions.NegocioException;
 import com.test.venda.domain.repository.ClienteRepository;
@@ -22,13 +25,14 @@ public class ClienteService {
     private final ClienteMapper mapper;
 
     public ClienteResponse salvar(ClienteRequest request) {
+        if(repository.findByCpf(request.getCpf()).isPresent()){
+            throw new NegocioException("CPF já cadastrado");
+        }
         Cliente cliente = mapper.toEntity(request);
-
         return mapper.toModel(repository.save(cliente));
     }
 
     public List<ClienteResponse> listarClientes() {
-
         return mapper.toColletionModel(repository.findAll());
     }
 
@@ -36,13 +40,16 @@ public class ClienteService {
         return repository.findById(id)
                 .map(mapper::toModel)
                 .orElseThrow(() -> new NegocioException("Cliente não encontrado"));
-
     }
 
-    public ResponseEntity<Cliente> alterarCliente(Long id, ClienteRequest request) {
-        return repository.findById(id).isPresent()
-                ? ResponseEntity.ok(repository.save(ClienteResponse.of(request, id)))
-                : ResponseEntity.notFound().build();
+    public ClienteResponse alterarCliente(Long id, ClienteRequest request) {
+        Cliente cliente = mapper.toEntity(request);
+        cliente.setId(id);
+
+        if (cliente.getId() != null && !repository.existsById(cliente.getId())) {
+            throw new NegocioException("Cliente não encontrado para atualização");
+        }
+        return mapper.toModel(repository.save(cliente));
     }
 
     public void deletar(Long id) {

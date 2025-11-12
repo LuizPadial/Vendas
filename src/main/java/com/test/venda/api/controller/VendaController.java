@@ -1,6 +1,8 @@
 package com.test.venda.api.controller;
 
+import com.test.venda.api.dto.request.ClienteRequest;
 import com.test.venda.api.dto.request.VendaRequest;
+import com.test.venda.api.dto.response.ClienteResponse;
 import com.test.venda.api.dto.response.VendaResponse;
 import com.test.venda.api.mappers.VendaMapper;
 import com.test.venda.domain.entity.Venda;
@@ -9,10 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -23,10 +22,10 @@ public class VendaController {
     private final VendaMapper mapper;
 
     @PostMapping
-    public ResponseEntity<VendaResponse> salvar(@Valid @RequestBody VendaRequest request) {
-        Venda venda = mapper.toVenda(request);
-        Venda vendaSalva = service.criarVenda(venda);
-        VendaResponse vendaResponse = mapper.toVendaResponse(vendaSalva);
-        return ResponseEntity.status(HttpStatus.CREATED).body(vendaResponse);
+    @ResponseStatus(HttpStatus.CREATED)
+    public VendaResponse salvar(@Valid @RequestBody VendaRequest request) {
+        return service.criarVenda(request);
+
     }
+
 }
