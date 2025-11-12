@@ -18,4 +18,5 @@ public class VendaRequest {
     private VendedorResponse vendedor;
     private List<ProdutoResponse> produto;
 
+
 }

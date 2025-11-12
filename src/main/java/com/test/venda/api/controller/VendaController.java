@@ -20,7 +20,7 @@ public class VendaController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public VendaResponse salvar(@Valid @RequestBody VendaRequest request) {
-        return service.criarVenda(request);
+        return service.salvarVenda(request);
 
     }
 

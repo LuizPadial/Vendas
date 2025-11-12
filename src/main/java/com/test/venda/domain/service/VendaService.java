@@ -35,34 +35,43 @@ public class VendaService {
     private final ProdutoRepository produtoRepository;
     private final VendaMapper mapper;
 
-    public VendaResponse criarVenda(VendaRequest request) {
-        Venda venda = mapper.toEntity(request);
+    public VendaResponse salvarVenda(VendaRequest request) {
+        var venda = mapper.toEntity(request);
+        defineCliente(venda);
+        defineVendedor(venda);
+        defineProdutos(venda);
 
-        venda.setCliente(buscarCliente(venda.getCliente().getId()));
-        venda.setVendedor(buscarVendedor(venda.getVendedor().getId()));
-        venda.setProduto(buscarProdutos(venda));
         venda.setValorTotal(calcularValorTotal(venda.getProduto()));
         venda.setDataVenda(LocalDateTime.now());
 
-        Venda salvo = vendaRepository.save(venda);
-        return mapper.toModel(salvo);
+        return mapper.toModel(vendaRepository.save(venda));
     }
 
-    private Cliente buscarCliente(Long id) {
-        return clienteRepository.findById(id)
+    private void defineCliente(Venda venda) {
+        var cliente = clienteRepository.findById(venda.getCliente().getId())
                 .orElseThrow(() -> new NegocioException("Cliente não encontrado!"));
+        venda.setCliente(cliente);
     }
 
-    private Vendedor buscarVendedor(Long id) {
-        return vendedorRepository.findById(id)
+    private void defineVendedor(Venda venda) {
+        var vendedor = vendedorRepository.findById(venda.getVendedor().getId())
                 .orElseThrow(() -> new NegocioException("Vendedor não encontrado!"));
+        venda.setVendedor(vendedor);
     }
 
-    private List<Produto> buscarProdutos(Venda venda) {
-        return venda.getProduto().stream()
-                .map(p -> produtoRepository.findById(p.getId())
-                        .orElseThrow(() -> new NegocioException("Produto não encontrado!")))
-                .toList();
+    private void defineProdutos(Venda venda) {
+        var produtos = produtoRepository.findAllById(
+                venda.getProduto()
+                        .stream()
+                        .map(Produto::getId)
+                        .collect(Collectors.toList())
+        );
+
+        if (produtos.isEmpty()) {
+            throw new NegocioException("Produtos não encontrados!");
+        }
+
+        venda.setProduto(produtos);
     }
 
     private BigDecimal calcularValorTotal(List<Produto> produtos) {

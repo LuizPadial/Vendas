@@ -16,7 +16,7 @@ import org.hibernate.validator.constraints.br.CPF;
 @SuperBuilder
 public abstract class Pessoa {
 
-    @Column(name = "CPF")
+    //@Column(name = "CPF")
     @NotBlank
     @CPF
     protected String cpf;

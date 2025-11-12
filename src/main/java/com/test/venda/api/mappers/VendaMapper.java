@@ -14,9 +14,11 @@ public class VendaMapper {
     private final ModelMapper mapper;
 
     public Venda toEntity(VendaRequest request){
+
         return mapper.map(request, Venda.class);
     }
     public VendaResponse toModel(Venda venda) {
+
         return mapper.map(venda, VendaResponse.class);
     }
 
