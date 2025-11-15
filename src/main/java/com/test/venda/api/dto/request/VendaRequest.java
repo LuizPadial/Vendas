@@ -1,12 +1,8 @@
 package com.test.venda.api.dto.request;
-
-import com.test.venda.api.dto.response.ClienteResponse;
-import com.test.venda.api.dto.response.ProdutoResponse;
-import com.test.venda.api.dto.response.VendedorResponse;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
 import java.util.List;
 
 @Getter

@@ -7,7 +7,10 @@ import com.test.venda.domain.service.VendaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,5 +25,19 @@ public class VendaController {
     public VendaResponse salvar(@Valid @RequestBody VendaRequest request) {
         return vendaService.salvarVenda(request);
 
+    }
+    @GetMapping
+    public ResponseEntity<List<VendaResponse>> listarVendas() {
+        return ResponseEntity.ok(vendaService.listarVendas());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<VendaResponse> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(vendaService.buscarPorId(id));
+    }
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Long id) {
+        vendaService.deletar(id);
     }
 }

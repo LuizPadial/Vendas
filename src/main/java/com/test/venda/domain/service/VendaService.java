@@ -33,7 +33,7 @@ public class VendaService {
     private final ClienteRepository clienteRepository;
     private final VendedorRepository vendedorRepository;
     private final ProdutoRepository produtoRepository;
-    private final VendaMapper mapper;
+    private final VendaMapper vendaMapper;
 
     public VendaResponse salvarVenda(VendaRequest request) {
         var venda = mapper.toEntity(request);
@@ -47,36 +47,54 @@ public class VendaService {
         return mapper.toModel(vendaRepository.save(venda));
     }
 
-    private void defineCliente(Venda venda) {
-        var cliente = clienteRepository.findById(venda.getCliente().getId())
+    public List<VendaResponse> listarVendas() {
+        List<Venda> vendas = vendaRepository.findAll();
+        return vendas.stream()
+                .map(vendaMapper::toModel)
+                .collect(Collectors.toList());
+    }
+
+    public VendaResponse buscarPorId(Long id) {
+        Venda venda = vendaRepository.findById(id)
+                .orElseThrow(() -> new NegocioException("Venda não encontrada"));
+        return vendaMapper.toModel(venda);
+    }
+    public void deletar(Long id) {
+        if (!vendaRepository.existsById(id)) {
+            throw new NegocioException("Venda não encontrado!");
+        }
+        vendaRepository.deleteById(id);
+    }
+
+    private Cliente atribuirCliente(Long clienteId) {
+        return clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new NegocioException("Cliente não encontrado!"));
-        venda.setCliente(cliente);
     }
 
-    private void atribuirVendedor(Venda venda) {
-        var vendedor = vendedorRepository.findById(venda.getVendedor().getId())
+    private Vendedor atribuirVendedor(Long vendedorId) {
+        return vendedorRepository.findById(vendedorId)
                 .orElseThrow(() -> new NegocioException("Vendedor não encontrado!"));
-        venda.setVendedor(vendedor);
     }
 
-    private void atribuirProdutos(Venda venda) {
-        if(venda.getProdutos() == null || venda.getProdutos().isEmpty()) {
+    private List<Produto> atribuirProdutos(List<Long> produtosIds)
+    {
+        if(produtosIds == null || produtosIds.isEmpty()) {
             throw new NegocioException("Você precisa adicionar algum produto");
         }
-        List<Long> ids = venda.getProdutos().stream()
-                .map(Produto::getId)
+        List<Long> ids = produtosIds.stream()
                 .filter(Objects::nonNull)
                 .distinct()
                 .collect(Collectors.toList());
+
         if(ids.isEmpty()){
             throw new NegocioException("Você precisa enviar um ID cadastrado");
         }
 
         List<Produto> produtos = produtoRepository.findAllById(ids);
         if (produtos.size() != ids.size()) {
-            throw new NegocioException("Existe produto inexistente ou inválido na venda.");
+            throw new NegocioException("Produto inexistente ou inválido na venda.");
         }
-        venda.setProdutos(produtos);
+        return produtos;
     }
 
     private BigDecimal calcularValorTotal(List<Produto> produtos) {

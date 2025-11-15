@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProdutoRequest {
-
     @NotBlank
     private String nomeProduto;
     @NotNull
