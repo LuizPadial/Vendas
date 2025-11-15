@@ -6,7 +6,6 @@ import com.test.venda.domain.entity.Cliente;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.stream.Collectors;
 @Component
@@ -28,5 +27,4 @@ public class ClienteMapper {
                 .map(this::toModel)
                 .collect(Collectors.toList());
     }
-
 }

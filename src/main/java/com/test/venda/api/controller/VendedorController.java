@@ -8,42 +8,41 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 
-@RequiredArgsConstructor
 @RestController
-@RequestMapping("/vendedor")
+@RequiredArgsConstructor
+@RequestMapping("vendedor")
 public class VendedorController {
 
-    private final VendedorService service;
+    private final VendedorService vendedorService;
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public VendedorResponse setVendedor(@Valid @RequestBody VendedorRequest request) {
-        return service.salvar(request);
+        return vendedorService.salvar(request);
     }
 
     @GetMapping
     public List<VendedorResponse> listarTodos(){
-        return service.listarVendedores();
+        return vendedorService.listarVendedores();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public VendedorResponse buscarPorId(@PathVariable Long id){
-        return service.buscarPorId(id);
+        return vendedorService.buscarPorId(id);
     }
 
-    @PutMapping("/{id}")
-    public VendedorResponse alterar(@PathVariable Long id,
-                                    @Valid @RequestBody VendedorRequest request) {
-        return service.alterarVendedor(id,request);
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void alterar(@PathVariable Long id,
+                        @Valid @RequestBody VendedorRequest request) {
+        vendedorService.alterarVendedor(id,request);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        service.deletar(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Long id) {
+        vendedorService.deletar(id);
     }
-
 }

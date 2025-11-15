@@ -13,11 +13,9 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "VENDEDOR")
 public class Vendedor extends Pessoa {
 
     @Id
-    @Column(name ="ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 

@@ -21,8 +21,6 @@ public abstract class Pessoa {
     @CPF
     protected String cpf;
 
-    @Column(name = "NOME_COMPLETO")
-    @NotBlank
     @Size(min = 5, max = 60)
     protected String nomeCompleto;
 

@@ -1,8 +1,10 @@
 package com.test.venda.domain.service;
 
+import com.test.venda.api.common.CpfUtil;
 import com.test.venda.api.dto.request.VendedorRequest;
 import com.test.venda.api.dto.response.VendedorResponse;
 import com.test.venda.api.mappers.VendedorMapper;
+import com.test.venda.domain.entity.Cliente;
 import com.test.venda.domain.entity.Vendedor;
 import com.test.venda.domain.exceptions.NegocioException;
 import com.test.venda.domain.repository.VendedorRepository;
@@ -22,10 +24,15 @@ public class VendedorService {
     private final VendedorMapper mapper;
 
     public VendedorResponse salvar(VendedorRequest request) {
-        if(repository.findByCpf(request.getCpf()).isPresent()){
+        String cpfNormalizado = CpfUtil.formatarCpf(request.getCpf());
+        if(CpfUtil.cpfNull(cpfNormalizado)){
+            throw new NegocioException("CPF inválido ou vazio");
+        }
+        if(repository.findByCpf(cpfNormalizado).isPresent()){
             throw new NegocioException("CPF já cadastrado");
         }
         Vendedor vendedor = mapper.toEntity(request);
+        vendedor.setCpf(cpfNormalizado);
         return mapper.toModel(repository.save(vendedor));
     }
 
@@ -56,5 +63,4 @@ public class VendedorService {
         }
         repository.deleteById(id);
     }
-
 }

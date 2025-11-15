@@ -1,9 +1,10 @@
 package com.test.venda.domain.service;
 
+import com.test.venda.api.common.CpfUtil;
 import com.test.venda.api.dto.request.ClienteRequest;
-import com.test.venda.api.dto.request.ClienteRequest;
+import com.test.venda.api.dto.request.VendedorRequest;
 import com.test.venda.api.dto.response.ClienteResponse;
-import com.test.venda.api.dto.response.ClienteResponse;
+import com.test.venda.api.dto.response.VendedorResponse;
 import com.test.venda.api.mappers.ClienteMapper;
 import com.test.venda.domain.entity.Cliente;
 import com.test.venda.domain.entity.Cliente;

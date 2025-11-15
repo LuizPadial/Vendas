@@ -16,10 +16,10 @@ import java.util.List;
 @AllArgsConstructor
 public class VendaResponse {
 
-    private Long idVenda;
+    private Long id;
     private ClienteResponse cliente;
     private VendedorResponse vendedor;
-    private List<ProdutoResponse> produto;
+    private List<ProdutoResponse> produtos;
     private BigDecimal valorTotal;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")

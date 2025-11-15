@@ -1,7 +1,9 @@
 package com.test.venda.domain.service;
 
+import com.test.venda.api.common.NomeUtil;
 import com.test.venda.api.dto.request.ClienteRequest;
 import com.test.venda.api.dto.request.ProdutoRequest;
+import com.test.venda.api.dto.request.VendedorRequest;
 import com.test.venda.api.dto.response.ClienteResponse;
 import com.test.venda.api.dto.response.ProdutoResponse;
 import com.test.venda.api.mappers.ProdutoMapper;
@@ -46,14 +48,20 @@ public class ProdutoService {
                 .orElseThrow(() -> new NegocioException("Produto não encontrado"));
     }
 
-    public ProdutoResponse alterarProduto(Long id, ProdutoRequest request) {
-        Produto produto = mapper.toEntity(request);
-        produto.setId(id);
-
-        if (produto.getId() != null && !repository.existsById(produto.getId())) {
-            throw new NegocioException("Produto não encontrado para atualização");
+    public void alterarProduto(Long id, ProdutoRequest request) {
+        Produto produto = repository.findById(id)
+                .orElseThrow(() -> new NegocioException("Produto não encontrado."));
+        String nomeNormalizado = NomeUtil.normalizarNome(request.getNomeProduto());
+        if (NomeUtil.nomeInvalido(nomeNormalizado)) {
+            throw new NegocioException("Nome do produto não pode ser vazio!");
         }
-        return mapper.toModel(repository.save(produto));
+        var existente = repository.findByNomeProduto(nomeNormalizado);
+        if (existente.isPresent() && !existente.get().getId().equals(id)) {
+            throw new NegocioException("Já existe outro produto com esse nome!");
+        }
+        produto.editar(request);
+        produto.setNomeProduto(nomeNormalizado);
+        repository.save(produto);
     }
 
     public void deletar(Long id) {

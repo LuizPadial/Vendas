@@ -53,25 +53,30 @@ public class VendaService {
         venda.setCliente(cliente);
     }
 
-    private void defineVendedor(Venda venda) {
+    private void atribuirVendedor(Venda venda) {
         var vendedor = vendedorRepository.findById(venda.getVendedor().getId())
                 .orElseThrow(() -> new NegocioException("Vendedor não encontrado!"));
         venda.setVendedor(vendedor);
     }
 
-    private void defineProdutos(Venda venda) {
-        var produtos = produtoRepository.findAllById(
-                venda.getProduto()
-                        .stream()
-                        .map(Produto::getId)
-                        .collect(Collectors.toList())
-        );
-
-        if (produtos.isEmpty()) {
-            throw new NegocioException("Produtos não encontrados!");
+    private void atribuirProdutos(Venda venda) {
+        if(venda.getProdutos() == null || venda.getProdutos().isEmpty()) {
+            throw new NegocioException("Você precisa adicionar algum produto");
+        }
+        List<Long> ids = venda.getProdutos().stream()
+                .map(Produto::getId)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        if(ids.isEmpty()){
+            throw new NegocioException("Você precisa enviar um ID cadastrado");
         }
 
-        venda.setProduto(produtos);
+        List<Produto> produtos = produtoRepository.findAllById(ids);
+        if (produtos.size() != ids.size()) {
+            throw new NegocioException("Existe produto inexistente ou inválido na venda.");
+        }
+        venda.setProdutos(produtos);
     }
 
     private BigDecimal calcularValorTotal(List<Produto> produtos) {

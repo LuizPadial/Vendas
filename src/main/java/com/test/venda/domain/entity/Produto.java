@@ -1,5 +1,7 @@
 package com.test.venda.domain.entity;
 
+import com.test.venda.api.dto.request.ClienteRequest;
+import com.test.venda.api.dto.request.ProdutoRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -20,17 +22,17 @@ public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
     private Long id;
 
-    @Column(name = "NOME_PRODUTO")
     @Size(min = 2, max = 30)
     private String nomeProduto;
 
-    @Column(name = "PRECO", precision = 10, scale = 2)
     @DecimalMin(value = "0.01", message = "O preço deve ser maior que zero")
     @DecimalMax(value = "999999999", message = "O preço máximo permitido é 999999999")
     private BigDecimal preco;
 
-
+    public void editar(ProdutoRequest request) {
+        this.nomeProduto = request.getNomeProduto();
+        this.preco = request.getPreco();
+    }
 }

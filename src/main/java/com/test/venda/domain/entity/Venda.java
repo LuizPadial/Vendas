@@ -14,7 +14,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "VENDA")
 public class Venda {
 
     @ManyToOne
@@ -24,16 +23,7 @@ public class Venda {
     private Vendedor vendedor;
 
     @ManyToMany
-    private List<Produto> produto = new ArrayList<>();
-
-    @Id
-    @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "DATA_VENDA")
+    private List<Produto> produtos = new ArrayList<>();
     private LocalDateTime dataVenda;
-
-    @Column(name= "VALOR_TOTAL")
     private BigDecimal valorTotal;
 }

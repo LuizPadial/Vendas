@@ -11,17 +11,16 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/vendas")
+@RequestMapping("venda")
 public class VendaController {
 
-    private final VendaService service;
+    private final VendaService vendaService;
     private final VendaMapper mapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public VendaResponse salvar(@Valid @RequestBody VendaRequest request) {
-        return service.salvarVenda(request);
+        return vendaService.salvarVenda(request);
 
     }
-
 }

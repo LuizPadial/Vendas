@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
@@ -21,30 +21,31 @@ public class ClienteController {
     private final ClienteService service;
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ClienteResponse setCliente(@Valid @RequestBody ClienteRequest request) {
-        return service.salvar(request);
+    public ClienteResponse registrarCliente(@Valid @RequestBody ClienteRequest request) {
+        return clienteService.salvar(request);
     }
 
     @GetMapping
-    public List<ClienteResponse> listarTodos(){
-        return service.listarClientes();
+    public List<ClienteResponse> listarClientes(){
+        return clienteService.listarClientes();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ClienteResponse buscarPorId(@PathVariable Long id){
-        return service.buscarPorId(id);
+        return clienteService.buscarPorId(id);
     }
 
-    @PutMapping("/{id}")
-    public ClienteResponse alterar(@PathVariable Long id,
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void alterar(@PathVariable Long id,
             @Valid @RequestBody ClienteRequest request) {
-        return service.alterarCliente(id, request);
+        clienteService.alterarCliente(id, request);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        service.deletar(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Long id) {
+        clienteService.deletar(id);
     }
 
 

@@ -28,5 +28,4 @@ public class ProdutoMapper {
                 .map(this::toModel)
                 .collect(Collectors.toList());
     }
-    
 }

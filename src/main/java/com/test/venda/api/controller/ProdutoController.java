@@ -8,9 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 
 @RequiredArgsConstructor
 @RestController
@@ -21,16 +19,17 @@ public class ProdutoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProdutoResponse setProduto(@Valid @RequestBody ProdutoRequest request) {
+    public ProdutoResponse registrarProduto(@Valid @RequestBody ProdutoRequest request) {
         return service.salvar(request);
     }
 
     @GetMapping
-    public List<ProdutoResponse> listarTodos(){
+    public List<ProdutoResponse> listarProdutos(){
         return service.listarProdutos();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ProdutoResponse buscarPorId(@PathVariable Long id){
         return service.buscarPorId(id);
     }
@@ -44,7 +43,5 @@ public class ProdutoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         service.deletar(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 }
