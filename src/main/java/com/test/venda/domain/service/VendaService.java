@@ -55,11 +55,17 @@ public class VendaService {
     }
 
     public VendaResponse buscarPorId(Long id) {
+        if (id == null || id <= 0) {
+            throw new NegocioException("ID inválido! O ID deve ser maior que zero.");
+        }
         Venda venda = vendaRepository.findById(id)
                 .orElseThrow(() -> new NegocioException("Venda não encontrada"));
         return vendaMapper.toModel(venda);
     }
     public void deletar(Long id) {
+        if (id == null || id <= 0) {
+            throw new NegocioException("ID inválido! O ID deve ser maior que zero.");
+        }
         if (!vendaRepository.existsById(id)) {
             throw new NegocioException("Venda não encontrado!");
         }

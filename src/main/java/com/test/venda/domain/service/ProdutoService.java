@@ -43,12 +43,18 @@ public class ProdutoService {
     }
 
     public ProdutoResponse buscarPorId(Long id) {
+        if (id == null || id <= 0) {
+            throw new NegocioException("ID inválido! O ID deve ser maior que zero.");
+        }
         return repository.findById(id)
                 .map(mapper::toModel)
                 .orElseThrow(() -> new NegocioException("Produto não encontrado"));
     }
 
     public void alterarProduto(Long id, ProdutoRequest request) {
+        if (id == null || id <= 0) {
+            throw new NegocioException("ID inválido! O ID deve ser maior que zero.");
+        }
         Produto produto = repository.findById(id)
                 .orElseThrow(() -> new NegocioException("Produto não encontrado."));
         String nomeNormalizado = NomeUtil.normalizarNome(request.getNomeProduto());
@@ -65,11 +71,12 @@ public class ProdutoService {
     }
 
     public void deletar(Long id) {
+        if (id == null || id <= 0) {
+            throw new NegocioException("ID inválido! O ID deve ser maior que zero.");
+        }
         if (!repository.existsById(id)) {
             throw new NegocioException("Produto não encontrado!");
         }
         repository.deleteById(id);
     }
-
-
 }

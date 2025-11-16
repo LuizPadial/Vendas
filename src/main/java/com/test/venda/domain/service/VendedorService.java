@@ -24,6 +24,9 @@ public class VendedorService {
     private final VendedorMapper mapper;
 
     public VendedorResponse salvar(VendedorRequest request) {
+        if (request.getNomeCompleto() == null || request.getNomeCompleto().isBlank()) {
+            throw new NegocioException("Nome é obrigatório");
+        }
         String cpfNormalizado = CpfUtil.formatarCpf(request.getCpf());
         if(CpfUtil.cpfNull(cpfNormalizado)){
             throw new NegocioException("CPF inválido ou vazio");
@@ -41,6 +44,9 @@ public class VendedorService {
     }
 
     public VendedorResponse buscarPorId(Long id) {
+        if (id == null || id <= 0) {
+            throw new NegocioException("ID inválido! O ID deve ser maior que zero.");
+        }
         return repository.findById(id)
                 .map(mapper::toModel)
                 .orElseThrow(() -> new NegocioException("Vendedor não encontrado"));
@@ -58,6 +64,9 @@ public class VendedorService {
     }
 
     public void deletar(Long id) {
+        if (id == null || id <= 0) {
+            throw new NegocioException("ID inválido! O ID deve ser maior que zero.");
+        }
         if (!repository.existsById(id)) {
             throw new NegocioException("Vendedor não encontrado!");
         }
