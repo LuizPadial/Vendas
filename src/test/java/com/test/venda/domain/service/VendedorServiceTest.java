@@ -84,7 +84,7 @@ class VendedorServiceTest {
                 .thenReturn(entity);
         when(vendedorMapper.toModel(entity))
                 .thenReturn(vendedorResponse);
-        VendedorResponse devolve = vendedorService.salvar(vendedorRequest);
+        vendedorService.salvar(vendedorRequest);
         verify(vendedorRepository).save(entity);
     }
 
@@ -92,7 +92,6 @@ class VendedorServiceTest {
     void deveNormalizarCpfAntesDeSalvar(){
         VendedorRequest vendedorRequest = new VendedorRequest("Luiz Fernando","111.222.333.11");
         Vendedor entity = new Vendedor();
-        VendedorResponse vendedorResponse = new VendedorResponse();
         when(vendedorRepository.findByCpf("11122233311"))
                 .thenReturn(Optional.empty());
         when(vendedorMapper.toEntity(vendedorRequest))
@@ -107,7 +106,6 @@ class VendedorServiceTest {
     void deveChamarMapperParaConversao(){
         VendedorRequest vendedorRequest = new VendedorRequest("Luiz Fernando","11122233311");
         Vendedor entity = new Vendedor();
-        VendedorResponse vendedorResponse = new VendedorResponse();
         when(vendedorRepository.findByCpf("11122233311"))
                 .thenReturn(Optional.empty());
         when(vendedorMapper.toEntity(vendedorRequest))
