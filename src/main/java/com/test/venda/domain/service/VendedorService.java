@@ -62,7 +62,6 @@ public class VendedorService {
         }
         return mapper.toModel(repository.save(vendedor));
     }
-
     public void deletar(Long id) {
         if (id == null || id <= 0) {
             throw new NegocioException("ID inválido! O ID deve ser maior que zero.");
